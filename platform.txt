@@ -201,3 +201,30 @@ tools.maple_upload.path.linux={runtime.tools.STM32Tools.path}/tools/linux
 tools.maple_upload.upload.params.verbose=-d
 tools.maple_upload.upload.params.quiet=n
 tools.maple_upload.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} {upload.usbID} "{build.path}/{build.project_name}.bin"
+
+
+
+
+# Upload using SensorXEL bootloader over Serial
+tools.xel_loader.cmd=xel_loader
+tools.xel_loader.cmd.windows=xel_loader.exe
+tools.xel_loader.path={runtime.hardware.path}/tools/win/xel_loader
+tools.xel_loader.path.macosx={runtime.hardware.path}/tools/macosx/xel_loader
+tools.xel_loader.path.linux={runtime.hardware.path}/tools/linux/xel_loader
+tools.xel_loader.path.linux64={runtime.hardware.path}/tools/linux64/xel_loader
+tools.xel_loader.upload.params.verbose=-d
+tools.xel_loader.upload.params.quiet=n
+tools.xel_loader.upload.pattern="{path}/{cmd}" {serial.port.file} 57600 08005000 "{build.path}/{build.project_name}.bin" 1 1
+
+# Upload using stm32flash
+tools.stm32flash.cmd=stm32flash
+tools.stm32flash.cmd.windows=stm32flash.exe
+tools.stm32flash.path={runtime.tools.opencr_tools.path}/win/stm32flash
+tools.stm32flash.path.macosx={runtime.tools.opencr_tools.path}/macosx/stm32flash
+tools.stm32flash.path.linux={runtime.tools.opencr_tools.path}/linux/stm32flash
+tools.stm32flash.erase.params.verbose=-v
+tools.stm32flash.erase.params.quiet=-q -q
+tools.stm32flash.erase.pattern=
+tools.stm32flash.bootloader.params.verbose=-v -v -v -v
+tools.stm32flash.bootloader.params.quiet=-q -q
+tools.stm32flash.bootloader.pattern="{path}/{cmd}" -e 80 -w "{runtime.platform.path}/bootloaders/{bootloader.file}" -v -g 0x08000000 {serial.port.file}
