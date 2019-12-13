@@ -389,7 +389,12 @@ void HardwareSerial::begin(unsigned long baud, byte config)
 
   uart_init(&_serial, (uint32_t)baud, databits, parity, stopbits);
   enableHalfDuplexRx();
+#if defined(ARDUINO_SensorXEL) || defined(ARDUINO_SensorXEL_revE)\
+ || defined(ARDUINO_PowerXEL)
+
+#else   
   uart_attach_rx_callback(&_serial, _rx_complete_irq);
+#endif
 }
 
 void HardwareSerial::end()
@@ -405,6 +410,15 @@ void HardwareSerial::end()
 
 int HardwareSerial::available(void)
 {
+#if defined(ARDUINO_SensorXEL) || defined(ARDUINO_SensorXEL_revE)\
+ || defined(ARDUINO_PowerXEL)
+  uint16_t cndtr = _serial.handle.hdmarx->Instance->CNDTR;
+  if(cndtr > SERIAL_RX_BUFFER_SIZE){
+    cndtr = SERIAL_RX_BUFFER_SIZE;
+  }
+  _serial.rx_head = SERIAL_RX_BUFFER_SIZE - cndtr;
+#endif
+
   return ((unsigned int)(SERIAL_RX_BUFFER_SIZE + _serial.rx_head - _serial.rx_tail)) % SERIAL_RX_BUFFER_SIZE;
 }
 

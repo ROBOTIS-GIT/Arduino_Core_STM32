@@ -306,7 +306,12 @@ void uart_init(serial_t *obj, uint32_t baudrate, uint32_t databits, uint32_t par
   huart->Init.Parity       = parity;
   huart->Init.Mode         = UART_MODE_TX_RX;
   huart->Init.HwFlowCtl    = UART_HWCONTROL_NONE;
+#if defined(ARDUINO_SensorXEL) || defined(ARDUINO_SensorXEL_revE)\
+ || defined(ARDUINO_PowerXEL)
+  huart->Init.OverSampling = UART_OVERSAMPLING_8;
+#else
   huart->Init.OverSampling = UART_OVERSAMPLING_16;
+#endif
 #if !defined(STM32F1xx) && !defined(STM32F2xx) && !defined(STM32F4xx)\
  && !defined(STM32L1xx)
   huart->AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
@@ -373,6 +378,11 @@ void uart_init(serial_t *obj, uint32_t baudrate, uint32_t databits, uint32_t par
   } else if (HAL_UART_Init(huart) != HAL_OK) {
     return;
   }
+
+#if defined(ARDUINO_SensorXEL) || defined(ARDUINO_SensorXEL_revE)\
+ || defined(ARDUINO_PowerXEL)
+  HAL_UART_Receive_DMA(huart, obj->rx_buff, SERIAL_RX_BUFFER_SIZE);
+#endif  
 }
 
 /**
@@ -800,7 +810,7 @@ uint8_t uart_index(UART_HandleTypeDef *huart)
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
   serial_t *obj = get_serial_obj(huart);
-  if (obj) {
+  if (obj && obj->rx_callback != NULL) {
     obj->rx_callback(obj);
   }
 }
@@ -852,7 +862,19 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
   /* Restart receive interrupt after any error */
   serial_t *obj = get_serial_obj(huart);
   if (obj && !serial_rx_active(obj)) {
+#if defined(ARDUINO_SensorXEL) || defined(ARDUINO_SensorXEL_revE)\
+ || defined(ARDUINO_PowerXEL)
+  if(huart->Instance == USART1 || huart->Instance == USART2){
+    obj->rx_head = SERIAL_RX_BUFFER_SIZE - obj->handle.hdmarx->Instance->CNDTR;
+    obj->rx_tail = obj->rx_head;
+    memset(obj->rx_buff, 0, SERIAL_RX_BUFFER_SIZE);
+    HAL_UART_Receive_DMA(huart, obj->rx_buff, SERIAL_RX_BUFFER_SIZE);
+  }else{
     HAL_UART_Receive_IT(huart, &(obj->recv), 1);
+  }
+#else
+    HAL_UART_Receive_IT(huart, &(obj->recv), 1);
+#endif    
   }
 }
 
@@ -1063,9 +1085,15 @@ void UART10_IRQHandler(void)
   */
 void HAL_UARTEx_WakeupCallback(UART_HandleTypeDef *huart)
 {
+#if defined(ARDUINO_SensorXEL) || defined(ARDUINO_SensorXEL_revE)\
+ || defined(ARDUINO_PowerXEL)
+  (void)huart;
+#else
   serial_t *obj = get_serial_obj(huart);
   HAL_UART_Receive_IT(huart,  &(obj->recv), 1);
+#endif  
 }
+
 #endif /* HAL_UART_MODULE_ENABLED */
 
 #ifdef __cplusplus
