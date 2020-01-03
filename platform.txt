@@ -4,7 +4,7 @@
 # For more info:
 # https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5-3rd-party-Hardware-specification
 
-name=STM32 Boards (selected from submenu)
+name=STM32 Boards (only XELNetwork version)
 version=1.0.0
 
 # STM compile variables
@@ -17,7 +17,7 @@ compiler.warning_flags.default=
 compiler.warning_flags.more=-Wall
 compiler.warning_flags.all=-Wall -Wextra
 
-compiler.path={runtime.tools.arm-none-eabi-gcc-8.2.1-1.7.path}/bin/
+compiler.path={runtime.tools.xpack-arm-none-eabi-gcc-9.2.1-1.1.path}/bin/
 
 compiler.S.cmd=arm-none-eabi-gcc
 compiler.c.cmd=arm-none-eabi-gcc
@@ -64,8 +64,8 @@ compiler.ar.extra_flags=
 compiler.elf2bin.extra_flags=
 compiler.elf2hex.extra_flags=
 
-compiler.arm.cmsis.c.flags="-I{runtime.tools.CMSIS-5.5.1.path}/CMSIS/Core/Include/" "-I{build.system.path}/Drivers/CMSIS/Device/ST/{build.series}/Include/" "-I{build.system.path}/Drivers/CMSIS/Device/ST/{build.series}/Source/Templates/gcc/" "-I{runtime.tools.CMSIS-5.5.1.path}/CMSIS/DSP/Include"
-compiler.arm.cmsis.ldflags="-L{runtime.tools.CMSIS-5.5.1.path}/CMSIS/DSP/Lib/GCC/" -l{build.cmsis_lib_gcc}
+compiler.arm.cmsis.c.flags="-I{runtime.platform.path}/tools/CMSIS/5.5.1/CMSIS/Core/Include/" "-I{build.system.path}/Drivers/CMSIS/Device/ST/{build.series}/Include/" "-I{build.system.path}/Drivers/CMSIS/Device/ST/{build.series}/Source/Templates/gcc/" "-I{runtime.tools.CMSIS-5.5.1.path}/CMSIS/DSP/Include"
+compiler.arm.cmsis.ldflags="-L{runtime.platform.path}/tools/CMSIS/5.5.1/CMSIS/DSP/Lib/GCC/" -l{build.cmsis_lib_gcc}
 
 # USB Flags
 # ---------
@@ -136,11 +136,11 @@ recipe.output.tmp_file={build.project_name}.bin
 recipe.output.save_file={build.project_name}.{build.variant}.bin
 
 ## Create output (.hex file)
-recipe.objcopy.hex.pattern="{compiler.path}{compiler.objcopy.cmd}" {compiler.elf2hex.flags} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.hex"
+# recipe.objcopy.hex.pattern="{compiler.path}{compiler.objcopy.cmd}" {compiler.elf2hex.flags} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.hex"
 
 ## Save hex
-recipe.output.tmp_file={build.project_name}.hex
-recipe.output.save_file={build.project_name}.{build.variant}.hex
+#recipe.output.tmp_file={build.project_name}.hex
+#recipe.output.save_file={build.project_name}.{build.variant}.hex
 
 ## Compute size
 recipe.size.pattern="{compiler.path}{compiler.size.cmd}" -A "{build.path}/{build.project_name}.elf"
@@ -151,53 +151,25 @@ recipe.size.regex.eeprom=^(?:\.eeprom)\s+([0-9]+).*
 
 # Uploader tool
 # -------------------
+# Upload using SensorXEL bootloader over Serial
+tools.xel_loader.cmd=xel_loader
+tools.xel_loader.cmd.windows=xel_loader.exe
+tools.xel_loader.path={runtime.hardware.path}/tools/xel_loader/linux
+tools.xel_loader.path.windows={runtime.hardware.path}/tools/xel_loader/win
+#tools.xel_loader.path.macosx={runtime.hardware.path}/tools/xel_loader/macosx
+tools.xel_loader.upload.params.verbose=-d
+tools.xel_loader.upload.params.quiet=n
+tools.xel_loader.upload.pattern="{path}/{cmd}" {serial.port.file} 1000000 {upload.flash_address} "{build.path}/{build.project_name}.bin" 1 1
 
-# Upload to board via mass storage
-tools.massStorageCopy.cmd=massStorageCopy
-tools.massStorageCopy.cmd.windows=massStorageCopy.bat
-tools.massStorageCopy.cmd.macosx=massStorageCopyMacOsX
-tools.massStorageCopy.path={runtime.tools.STM32Tools.path}/tools/win
-tools.massStorageCopy.path.macosx={runtime.tools.STM32Tools.path}/tools/macosx
-tools.massStorageCopy.path.linux={runtime.tools.STM32Tools.path}/tools/linux
-tools.massStorageCopy.upload.params.verbose=
-tools.massStorageCopy.upload.params.quiet=
-tools.massStorageCopy.upload.pattern="{path}/{cmd}" {upload.verbose} -I "{build.path}/{build.project_name}.bin" -O "{node}"
-
-# STM32CubeProgrammer upload
-tools.stm32CubeProg.cmd=stm32CubeProg.sh
-tools.stm32CubeProg.cmd.macosx=stm32CubeProg
-tools.stm32CubeProg.cmd.windows=stm32CubeProg.bat
-tools.stm32CubeProg.path.linux={runtime.tools.STM32Tools.path}/tools/linux
-tools.stm32CubeProg.path.macosx={runtime.tools.STM32Tools.path}/tools/macosx
-tools.stm32CubeProg.path.windows={runtime.tools.STM32Tools.path}/tools/win
-tools.stm32CubeProg.upload.params.verbose=
-tools.stm32CubeProg.upload.params.quiet=
-tools.stm32CubeProg.upload.pattern="{path}/{cmd}" {upload.protocol} "{build.path}/{build.project_name}.bin" {upload.options}
-
-# blackmagic upload for generic STM32
-tools.bmp_upload.cmd=arm-none-eabi-gdb
-tools.bmp_upload.path={runtime.tools.arm-none-eabi-gcc.path}/bin/
-tools.bmp_upload.upload.speed=230400
-tools.bmp_upload.upload.params.verbose=-batch
-tools.bmp_upload.upload.params.quiet=--batch-silent
-tools.bmp_upload.upload.pattern="{path}{cmd}" -nx -b {upload.speed} {upload.verbose} -ex "set confirm off" -ex "target extended-remote {serial.port}" -ex "monitor swdp_scan" -ex "attach 1" -ex "load" -ex "compare-sections" -ex "kill" "{build.path}/{build.project_name}.elf"
-
-# HID flash 2.2 (HID bootloader v2.2 for STM32F1 and STM32F4 series)
-tools.hid_upload.cmd=hid-flash
-tools.hid_upload.cmd.windows=hid-flash.exe
-tools.hid_upload.path={runtime.tools.STM32Tools.path}/tools/win
-tools.hid_upload.path.macosx={runtime.tools.STM32Tools.path}/tools/macosx
-tools.hid_upload.path.linux={runtime.tools.STM32Tools.path}/tools/linux
-tools.hid_upload.upload.params.verbose=-d
-tools.hid_upload.upload.params.quiet=n
-tools.hid_upload.upload.pattern="{path}/{cmd}" "{build.path}/{build.project_name}.bin" {serial.port.file}                                                                                                                             
-
-# Upload using Maple bootloader over DFU
-tools.maple_upload.cmd=maple_upload
-tools.maple_upload.cmd.windows=maple_upload.bat
-tools.maple_upload.path={runtime.tools.STM32Tools.path}/tools/win
-tools.maple_upload.path.macosx={runtime.tools.STM32Tools.path}/tools/macosx
-tools.maple_upload.path.linux={runtime.tools.STM32Tools.path}/tools/linux
-tools.maple_upload.upload.params.verbose=-d
-tools.maple_upload.upload.params.quiet=n
-tools.maple_upload.upload.pattern="{path}/{cmd}" {serial.port.file} {upload.altID} {upload.usbID} "{build.path}/{build.project_name}.bin"
+# Upload using stm32flash
+tools.stm32flash.cmd=stm32flash
+tools.stm32flash.cmd.windows=stm32flash.exe
+tools.stm32flash.path={runtime.hardware.path}/tools/stm32flash/linux
+tools.stm32flash.path.windows={runtime.hardware.path}/tools/stm32flash/win
+#tools.stm32flash.path.macosx={runtime.hardware.path}/tools/stm32flash/macosx
+tools.stm32flash.erase.params.verbose=-v
+tools.stm32flash.erase.params.quiet=-q -q
+tools.stm32flash.erase.pattern=
+tools.stm32flash.bootloader.params.verbose=-v -v -v -v
+tools.stm32flash.bootloader.params.quiet=-q -q
+tools.stm32flash.bootloader.pattern="{path}/{cmd}" -e 48 -w "{runtime.platform.path}/bootloaders/{bootloader.file}" -v -g 0x08000000 {serial.port.file}
