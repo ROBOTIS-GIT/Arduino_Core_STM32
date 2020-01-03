@@ -1,7 +1,0 @@
-/* Generated automatically. */
-static const char configuration_arguments[] = "/Host/home/ilg/Work/arm-none-eabi-gcc-8.2.1-1.7/sources/gcc/configure --prefix=/Host/home/ilg/Work/arm-none-eabi-gcc-8.2.1-1.7/linux-x32/install/arm-none-eabi-gcc --infodir=/Host/home/ilg/Work/arm-none-eabi-gcc-8.2.1-1.7/linux-x32/install/arm-none-eabi-gcc/share/doc/info --mandir=/Host/home/ilg/Work/arm-none-eabi-gcc-8.2.1-1.7/linux-x32/install/arm-none-eabi-gcc/share/doc/man --htmldir=/Host/home/ilg/Work/arm-none-eabi-gcc-8.2.1-1.7/linux-x32/install/arm-none-eabi-gcc/share/doc/html --pdfdir=/Host/home/ilg/Work/arm-none-eabi-gcc-8.2.1-1.7/linux-x32/install/arm-none-eabi-gcc/share/doc/pdf --build=i686-pc-linux-gnu --host=i686-pc-linux-gnu --target=arm-none-eabi --with-pkgversion='GNU MCU Eclipse ARM Embedded GCC\\x2C 32-bit' --enable-languages=c,c++ --disable-mingw-wildcard --enable-plugins --enable-lto --disable-decimal-float --disable-libffi --disable-libgomp --disable-libmudflap --disable-libquadmath --disable-libssp --disable-libstdcxx-pch --disable-nls --disable-threads --disable-tls --with-gnu-as --with-gnu-ld --with-newlib --with-headers=yes --with-python-dir=share/gcc-arm-none-eabi --with-sysroot=/Host/home/ilg/Work/arm-none-eabi-gcc-8.2.1-1.7/linux-x32/install/arm-none-eabi-gcc/arm-none-eabi --with-multilib-list=rmprofile --disable-rpath --disable-build-format-warnings --with-system-zlib";
-static const char thread_model[] = "single";
-
-static const struct {
-  const char *name, *value;
-} configure_default_options[] = { { "cpu", "arm7tdmi" }, { "float", "soft" } };

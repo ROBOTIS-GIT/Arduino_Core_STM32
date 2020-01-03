@@ -17,7 +17,7 @@ compiler.warning_flags.default=
 compiler.warning_flags.more=-Wall
 compiler.warning_flags.all=-Wall -Wextra
 
-compiler.path={runtime.platform.path}/tools/arm-none-eabi-gcc/8.2.1-1.7/bin/
+compiler.path={runtime.tools.xpack-arm-none-eabi-gcc-9.2.1-1.1.path}/bin/
 
 compiler.S.cmd=arm-none-eabi-gcc
 compiler.c.cmd=arm-none-eabi-gcc
@@ -151,16 +151,12 @@ recipe.size.regex.eeprom=^(?:\.eeprom)\s+([0-9]+).*
 
 # Uploader tool
 # -------------------
-
-
-
 # Upload using SensorXEL bootloader over Serial
 tools.xel_loader.cmd=xel_loader
 tools.xel_loader.cmd.windows=xel_loader.exe
-tools.xel_loader.path={runtime.hardware.path}/tools/win/xel_loader
-tools.xel_loader.path.macosx={runtime.hardware.path}/tools/macosx/xel_loader
-tools.xel_loader.path.linux={runtime.hardware.path}/tools/linux/xel_loader
-tools.xel_loader.path.linux64={runtime.hardware.path}/tools/linux64/xel_loader
+tools.xel_loader.path={runtime.hardware.path}/tools/xel_loader/linux
+tools.xel_loader.path.windows={runtime.hardware.path}/tools/xel_loader/win
+#tools.xel_loader.path.macosx={runtime.hardware.path}/tools/xel_loader/macosx
 tools.xel_loader.upload.params.verbose=-d
 tools.xel_loader.upload.params.quiet=n
 tools.xel_loader.upload.pattern="{path}/{cmd}" {serial.port.file} 1000000 {upload.flash_address} "{build.path}/{build.project_name}.bin" 1 1
@@ -168,9 +164,9 @@ tools.xel_loader.upload.pattern="{path}/{cmd}" {serial.port.file} 1000000 {uploa
 # Upload using stm32flash
 tools.stm32flash.cmd=stm32flash
 tools.stm32flash.cmd.windows=stm32flash.exe
-tools.stm32flash.path={runtime.hardware.path}/tools/win/stm32flash
-tools.stm32flash.path.macosx={runtime.hardware.path}/tools/macosx/stm32flash
-tools.stm32flash.path.linux={runtime.hardware.path}/tools/linux/stm32flash
+tools.stm32flash.path={runtime.hardware.path}/tools/stm32flash/linux
+tools.stm32flash.path.windows={runtime.hardware.path}/tools/stm32flash/win
+#tools.stm32flash.path.macosx={runtime.hardware.path}/tools/stm32flash/macosx
 tools.stm32flash.erase.params.verbose=-v
 tools.stm32flash.erase.params.quiet=-q -q
 tools.stm32flash.erase.pattern=
