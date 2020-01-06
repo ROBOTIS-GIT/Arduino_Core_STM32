@@ -17,8 +17,8 @@
           "category": "Contributed",
           "url": "https://github.com/ROBOTIS-GIT/Arduino_Core_STM32/releases/download/0.0.1/STM32_XELNetwork.tar.bz2",
           "archiveFileName": "STM32_XELNetwork.tar.bz2",
-          "checksum": "SHA-256:0646DC8F08360F102A0B0163E260074116B428C11FC3F4D04B06383D57F19BB4",
-          "size": "2088364",
+          "checksum": "SHA-256:12C6C9A8EB6B519A9DFCCFF87DBD53C679CEC0514B5BEBA3191FF1025585F6A0",
+          "size": "2089036",
           "boards": [
             {"name": "SensorXEL"},
             {"name": "PowerXEL"}

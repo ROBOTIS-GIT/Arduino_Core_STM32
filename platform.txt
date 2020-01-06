@@ -159,7 +159,7 @@ tools.xel_loader.path.windows={runtime.platform.path}/tools/xel_loader/win
 #tools.xel_loader.path.macosx={runtime.platform.path}/tools/xel_loader/macosx
 tools.xel_loader.upload.params.verbose=-d
 tools.xel_loader.upload.params.quiet=n
-tools.xel_loader.upload.pattern="{path}/{cmd}" {serial.port.file} 1000000 {upload.flash_address} "{build.path}/{build.project_name}.bin" 1 1
+tools.xel_loader.upload.pattern="{path}/{cmd}" {serial.port} 1000000 {upload.flash_address} "{build.path}/{build.project_name}.bin" 1 1
 
 # Upload using stm32flash
 tools.stm32flash.cmd=stm32flash
