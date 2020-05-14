@@ -4,3 +4,10 @@ stm32flash.protocol=stm32flash
 stm32flash.program.protocol=stm32flash
 stm32flash.program.tool=stm32flash
 stm32flash.program.extra_params=-P{serial.port}
+
+dfu_util.name=dfu_util
+dfu_util.communication=serial
+dfu_util.protocol=dfu_util
+dfu_util.program.protocol=dfu_util
+dfu_util.program.tool=dfu_util
+dfu_util.program.extra_params=-P{serial.port}

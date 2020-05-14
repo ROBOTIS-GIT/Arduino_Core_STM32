@@ -69,21 +69,21 @@ XELNetwork.menu.pnum.PowerXEL.bootloader.file = powerXel_boot.bin
 #XELNetwork.menu.pnum.SensorXEL_revE.bootloader.file = sensorXel_boot_revE.bin
 
 # CommXEL board (lastest)
-#XELNetwork.menu.pnum.CommXEL=CommXEL. (320kb RAM)
-#XELNetwork.menu.pnum.CommXEL.upload.maximum_data_size=327680
-#XELNetwork.menu.pnum.CommXEL.upload.maximum_size=785920
-#XELNetwork.menu.pnum.CommXEL.upload.flash_address=0x08040000
-#XELNetwork.menu.pnum.CommXEL.build.mcu=cortex-m7
-#XELNetwork.menu.pnum.CommXEL.build.flags.fp=-mfpu=fpv4-sp-d16 -mfloat-abi=hard
-#XELNetwork.menu.pnum.CommXEL.build.board=CommXEL
-#XELNetwork.menu.pnum.CommXEL.build.series=STM32F7xx
-#XELNetwork.menu.pnum.CommXEL.build.product_line=STM32F746xx
-#XELNetwork.menu.pnum.CommXEL.build.variant=XELNetwork_CommXEL
-#XELNetwork.menu.pnum.CommXEL.build.flash_offset=0x40200
-#XELNetwork.menu.pnum.CommXEL.build.cmsis_lib_gcc=arm_cortexM7lfsp_math
-#XELNetwork.menu.pnum.CommXEL.build.extra_flags=-D{build.product_line} {build.enable_usb} {build.xSerial} -DVECT_TAB_OFFSET={build.flash_offset} -DUSBCON -DUSBD_USE_CDC -DUSBD_VID=0xFFF1 -DUSB_PRODUCT="ROBOTIS" -DHAL_PCD_MODULE_ENABLED -DSERIAL_TX_BUFFER_SIZE=4096 -DSERIAL_RX_BUFFER_SIZE=4096
-#XELNetwork.menu.pnum.CommXEL.bootloader.tool = dfu-util
-#XELNetwork.menu.pnum.CommXEL.bootloader.file = commXel_boot.bin
+XELNetwork.menu.pnum.CommXEL=CommXEL. (320kb RAM)
+XELNetwork.menu.pnum.CommXEL.upload.maximum_data_size=327680
+XELNetwork.menu.pnum.CommXEL.upload.maximum_size=785920
+XELNetwork.menu.pnum.CommXEL.upload.flash_address=0x08040000
+XELNetwork.menu.pnum.CommXEL.build.mcu=cortex-m7
+XELNetwork.menu.pnum.CommXEL.build.flags.fp=-mfpu=fpv4-sp-d16 -mfloat-abi=hard
+XELNetwork.menu.pnum.CommXEL.build.board=CommXEL
+XELNetwork.menu.pnum.CommXEL.build.series=STM32F7xx
+XELNetwork.menu.pnum.CommXEL.build.product_line=STM32F746xx
+XELNetwork.menu.pnum.CommXEL.build.variant=XELNetwork_CommXEL
+XELNetwork.menu.pnum.CommXEL.build.flash_offset=0x40200
+XELNetwork.menu.pnum.CommXEL.build.cmsis_lib_gcc=arm_cortexM7lfsp_math
+XELNetwork.menu.pnum.CommXEL.build.extra_flags=-D{build.product_line} {build.enable_usb} {build.xSerial} -DVECT_TAB_OFFSET={build.flash_offset} -DUSBCON -DUSBD_USE_CDC -DUSBD_VID=0xFFF1 -DUSB_PRODUCT="ROBOTIS" -DHAL_PCD_MODULE_ENABLED -DSERIAL_TX_BUFFER_SIZE=4096 -DSERIAL_RX_BUFFER_SIZE=4096
+XELNetwork.menu.pnum.CommXEL.bootloader.tool = dfu_util
+XELNetwork.menu.pnum.CommXEL.bootloader.file = commXel_boot.bin
 
 # Upload menu
 XELNetwork.menu.upload_method.xel_loader=XEL Loader (Serial)
