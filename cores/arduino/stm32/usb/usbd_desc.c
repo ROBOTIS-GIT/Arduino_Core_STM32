@@ -39,7 +39,9 @@
 #define USBD_LANGID_STRING            0x409   /* 1033 US.S English */
 
 #ifdef USBD_USE_HID_COMPOSITE
+#ifndef USBD_CLASS_PID
 #define USBD_CLASS_PID                      0x5711
+#endif
 #define USBD_CLASS_PRODUCT_HS_STRING        CONCATS(USB_PRODUCT, "HID in HS Mode")
 #define USBD_CLASS_PRODUCT_FS_STRING        CONCATS(USB_PRODUCT, "HID in FS Mode")
 #define USBD_CLASS_CONFIGURATION_HS_STRING  CONCATS(USB_PRODUCT, "HID Config")
@@ -49,7 +51,9 @@
 #endif /* USBD_USE_HID_COMPOSITE */
 
 #ifdef USBD_USE_CDC
+#ifndef USBD_CLASS_PID
 #define USBD_CLASS_PID                      0x5740
+#endif
 #define USBD_CLASS_PRODUCT_HS_STRING        CONCATS(USB_PRODUCT, "CDC in HS Mode")
 #define USBD_CLASS_PRODUCT_FS_STRING        CONCATS(USB_PRODUCT, "CDC in FS Mode")
 #define USBD_CLASS_CONFIGURATION_HS_STRING  CONCATS(USB_PRODUCT, "CDC Config")
@@ -145,6 +149,20 @@ __ALIGN_BEGIN   uint8_t USBD_LangIDDesc[USB_LEN_LANGID_STR_DESC] __ALIGN_END = {
 uint8_t USBD_StringSerial[USB_SIZ_STRING_SERIAL] = {
   USB_SIZ_STRING_SERIAL,
   USB_DESC_TYPE_STRING,
+#if defined(ARDUINO_CommXEL)  
+  '0', 0,                 // 2
+  '0', 0,                 // 4
+  '0', 0,                 // 6
+  '0', 0,                 // 8
+  '0', 0,                 // 10
+  '0', 0,                 // 12
+  '0', 0,                 // 14
+  '0', 0,                 // 16
+  '0', 0,                 // 18
+  '0', 0,                 // 20
+  '0', 0,                 // 22
+  '0', 0                  // 24  
+#endif  
 };
 
 __ALIGN_BEGIN uint8_t USBD_StrDesc[USBD_MAX_STR_DESC_SIZ] __ALIGN_END;
@@ -220,7 +238,9 @@ uint8_t *USBD_SerialStrDescriptor(USBD_SpeedTypeDef speed, uint16_t *length)
   *length = USB_SIZ_STRING_SERIAL;
 
   /* Update the serial number string descriptor with the data from the unique ID*/
+#if !defined(ARDUINO_CommXEL)
   Get_SerialNum();
+#endif  
 
   return (uint8_t *)USBD_StringSerial;
 }

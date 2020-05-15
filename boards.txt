@@ -15,7 +15,6 @@ menu.upload_method=Upload method
 
 XELNetwork.name=XELNetwork
 
-XELNetwork.build.vid=0x0483
 XELNetwork.build.core=arduino
 XELNetwork.build.board=XELNetwork
 XELNetwork.build.extra_flags=-D{build.product_line} {build.enable_usb} {build.xSerial}
@@ -32,7 +31,7 @@ XELNetwork.menu.pnum.SensorXEL.build.product_line=STM32L151xBA
 XELNetwork.menu.pnum.SensorXEL.build.variant=XELNetwork_SensorXEL
 XELNetwork.menu.pnum.SensorXEL.build.flash_offset=0x3200
 XELNetwork.menu.pnum.SensorXEL.build.cmsis_lib_gcc=arm_cortexM3l_math
-XELNetwork.menu.pnum.SensorXEL.build.extra_flags=-D{build.product_line} {build.enable_usb} {build.xSerial} -DVECT_TAB_OFFSET={build.flash_offset} -DSERIAL_TX_BUFFER_SIZE=1024 -DSERIAL_RX_BUFFER_SIZE=1024
+XELNetwork.menu.pnum.SensorXEL.build.extra_flags=-D{build.product_line} {build.xSerial} -DVECT_TAB_OFFSET={build.flash_offset} -DSERIAL_TX_BUFFER_SIZE=1024 -DSERIAL_RX_BUFFER_SIZE=1024
 XELNetwork.menu.pnum.SensorXEL.bootloader.tool = stm32flash
 XELNetwork.menu.pnum.SensorXEL.bootloader.file = sensorXel_boot.bin
 
@@ -48,7 +47,7 @@ XELNetwork.menu.pnum.PowerXEL.build.product_line=STM32L151xBA
 XELNetwork.menu.pnum.PowerXEL.build.variant=XELNetwork_PowerXEL
 XELNetwork.menu.pnum.PowerXEL.build.flash_offset=0x3200
 XELNetwork.menu.pnum.PowerXEL.build.cmsis_lib_gcc=arm_cortexM3l_math
-XELNetwork.menu.pnum.PowerXEL.build.extra_flags=-D{build.product_line} {build.enable_usb} {build.xSerial} -DVECT_TAB_OFFSET={build.flash_offset} -DSERIAL_TX_BUFFER_SIZE=1024 -DSERIAL_RX_BUFFER_SIZE=1024
+XELNetwork.menu.pnum.PowerXEL.build.extra_flags=-D{build.product_line} {build.xSerial} -DVECT_TAB_OFFSET={build.flash_offset} -DSERIAL_TX_BUFFER_SIZE=1024 -DSERIAL_RX_BUFFER_SIZE=1024
 XELNetwork.menu.pnum.PowerXEL.bootloader.tool = stm32flash
 XELNetwork.menu.pnum.PowerXEL.bootloader.file = powerXel_boot.bin
 
@@ -64,7 +63,7 @@ XELNetwork.menu.pnum.PowerXEL.bootloader.file = powerXel_boot.bin
 #XELNetwork.menu.pnum.SensorXEL_revE.build.variant=XELNetwork_SensorXEL_revE
 #XELNetwork.menu.pnum.SensorXEL_revE.build.flash_offset=0x3200
 #XELNetwork.menu.pnum.SensorXEL_revE.build.cmsis_lib_gcc=arm_cortexM3l_math
-#XELNetwork.menu.pnum.SensorXEL_revE.build.extra_flags=-D{build.product_line} {build.enable_usb} {build.xSerial} -DVECT_TAB_OFFSET={build.flash_offset} -DSERIAL_TX_BUFFER_SIZE=1024 -DSERIAL_RX_BUFFER_SIZE=1024
+#XELNetwork.menu.pnum.SensorXEL_revE.build.extra_flags=-D{build.product_line} {build.xSerial} -DVECT_TAB_OFFSET={build.flash_offset} -DSERIAL_TX_BUFFER_SIZE=1024 -DSERIAL_RX_BUFFER_SIZE=1024
 #XELNetwork.menu.pnum.SensorXEL_revE.bootloader.tool = stm32flash
 #XELNetwork.menu.pnum.SensorXEL_revE.bootloader.file = sensorXel_boot_revE.bin
 
@@ -81,7 +80,10 @@ XELNetwork.menu.pnum.CommXEL.build.product_line=STM32F746xx
 XELNetwork.menu.pnum.CommXEL.build.variant=XELNetwork_CommXEL
 XELNetwork.menu.pnum.CommXEL.build.flash_offset=0x40200
 XELNetwork.menu.pnum.CommXEL.build.cmsis_lib_gcc=arm_cortexM7lfsp_math
-XELNetwork.menu.pnum.CommXEL.build.extra_flags=-D{build.product_line} {build.enable_usb} {build.xSerial} -DVECT_TAB_OFFSET={build.flash_offset} -DUSBCON -DUSBD_USE_CDC -DUSBD_VID=0xFFF1 -DUSB_PRODUCT="ROBOTIS" -DHAL_PCD_MODULE_ENABLED -DSERIAL_TX_BUFFER_SIZE=4096 -DSERIAL_RX_BUFFER_SIZE=4096
+XELNetwork.menu.pnum.CommXEL.build.vid=0xFFF1
+XELNetwork.menu.pnum.CommXEL.build.pid=0xFF48
+XELNetwork.menu.pnum.CommXEL.build.usb_manufacturer="ROBOTIS"
+XELNetwork.menu.pnum.CommXEL.build.extra_flags=-D{build.product_line} -DVECT_TAB_OFFSET={build.flash_offset} -DUSBD_USE_CDC {build.usb_flags} {build.xSerial} -DSERIAL_TX_BUFFER_SIZE=4096 -DSERIAL_RX_BUFFER_SIZE=4096
 XELNetwork.menu.pnum.CommXEL.bootloader.tool = dfu_util
 XELNetwork.menu.pnum.CommXEL.bootloader.file = commXel_boot.bin
 
@@ -99,6 +101,20 @@ XELNetwork.menu.xserial.none=Enabled (no generic 'Serial')
 XELNetwork.menu.xserial.none.build.xSerial=-DHAL_UART_MODULE_ENABLED -DHWSERIAL_NONE
 XELNetwork.menu.xserial.disabled=Disabled (no Serial support)
 XELNetwork.menu.xserial.disabled.build.xSerial=
+
+# USB connectivity
+#XELNetwork.menu.usb.none=None
+#XELNetwork.menu.usb.CDCgen=CDC (generic 'Serial' supersede U(S)ART)
+#XELNetwork.menu.usb.CDCgen.build.enable_usb={build.usb_flags} -DUSBD_USE_CDC
+#XELNetwork.menu.usb.CDC=CDC (no generic 'Serial')
+#XELNetwork.menu.usb.CDC.build.enable_usb={build.usb_flags} -DUSBD_USE_CDC -DDISABLE_GENERIC_SERIALUSB
+#XELNetwork.menu.usb.HID=HID (keyboard and mouse)
+#XELNetwork.menu.usb.HID.build.enable_usb={build.usb_flags} -DUSBD_USE_HID_COMPOSITE
+#XELNetwork.menu.xusb.FS=Low/Full Speed
+#XELNetwork.menu.xusb.HS=High Speed
+#XELNetwork.menu.xusb.HS.build.usb_speed=-DUSE_USB_HS
+#XELNetwork.menu.xusb.HSFS=High Speed in Full Speed mode
+#XELNetwork.menu.xusb.HSFS.build.usb_speed=-DUSE_USB_HS -DUSE_USB_HS_IN_FS
 
 # Optimizations
 XELNetwork.menu.opt.osstd=Smallest (-Os default)
