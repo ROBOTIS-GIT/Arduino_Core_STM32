@@ -307,7 +307,7 @@ void uart_init(serial_t *obj, uint32_t baudrate, uint32_t databits, uint32_t par
   huart->Init.Mode         = UART_MODE_TX_RX;
   huart->Init.HwFlowCtl    = UART_HWCONTROL_NONE;
 #if defined(ARDUINO_SensorXEL) || defined(ARDUINO_SensorXEL_revE)\
- || defined(ARDUINO_PowerXEL)
+ || defined(ARDUINO_PowerXEL) || defined(ARDUINO_CommXEL)
   huart->Init.OverSampling = UART_OVERSAMPLING_8;
 #else  
   huart->Init.OverSampling = UART_OVERSAMPLING_16;
@@ -379,7 +379,7 @@ void uart_init(serial_t *obj, uint32_t baudrate, uint32_t databits, uint32_t par
     return;
   }
 #if defined(ARDUINO_SensorXEL) || defined(ARDUINO_SensorXEL_revE)\
- || defined(ARDUINO_PowerXEL)
+ || defined(ARDUINO_PowerXEL) || defined(ARDUINO_CommXEL)
   HAL_UART_Receive_DMA(huart, obj->rx_buff, SERIAL_RX_BUFFER_SIZE);
 #endif  
 }
@@ -862,9 +862,13 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
   serial_t *obj = get_serial_obj(huart);
   if (obj && !serial_rx_active(obj)) {
 #if defined(ARDUINO_SensorXEL) || defined(ARDUINO_SensorXEL_revE)\
- || defined(ARDUINO_PowerXEL)
+ || defined(ARDUINO_PowerXEL) || defined(ARDUINO_CommXEL)
   if(huart->Instance == USART1 || huart->Instance == USART2){
+#if defined(ARDUINO_CommXEL)
+    obj->rx_head = SERIAL_RX_BUFFER_SIZE - obj->handle.hdmarx->Instance->NDTR;
+#else
     obj->rx_head = SERIAL_RX_BUFFER_SIZE - obj->handle.hdmarx->Instance->CNDTR;
+#endif
     obj->rx_tail = obj->rx_head;
     memset(obj->rx_buff, 0, SERIAL_RX_BUFFER_SIZE);
     HAL_UART_Receive_DMA(huart, obj->rx_buff, SERIAL_RX_BUFFER_SIZE);
@@ -1085,7 +1089,7 @@ void UART10_IRQHandler(void)
 void HAL_UARTEx_WakeupCallback(UART_HandleTypeDef *huart)
 {
 #if defined(ARDUINO_SensorXEL) || defined(ARDUINO_SensorXEL_revE)\
- || defined(ARDUINO_PowerXEL)
+ || defined(ARDUINO_PowerXEL) || defined(ARDUINO_CommXEL)
   (void)huart;
 #else  
   serial_t *obj = get_serial_obj(huart);
