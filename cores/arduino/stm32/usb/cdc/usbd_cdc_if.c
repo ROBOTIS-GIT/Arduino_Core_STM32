@@ -199,8 +199,8 @@ static int8_t USBD_CDC_Control(uint8_t cmd, uint8_t *pbuf, uint16_t length)
       break;
 
     case CDC_SET_CONTROL_LINE_STATE:
-      lineState =
-        (((USBD_SetupReqTypedef *)pbuf)->wValue & 0x01) != 0; // Check DTR state
+      lineState = 1;
+        // (((USBD_SetupReqTypedef *)pbuf)->wValue & 0x01) != 0; // Check DTR state
       if (lineState) { // Reset the transmit timeout when the port is connected
         transmitStart = 0;
       }
@@ -375,6 +375,68 @@ bool CDC_resume_receive(void)
   }
   return false;
 }
+
+#if defined(ARDUINO_CommXEL)
+uint32_t CDC_get_baudrate()
+{
+  return linecoding.bitrate;
+}
+
+
+void CDC_Itf_TxISR(void *arg)
+{
+  // uint32_t buffsize;
+  // USBD_CDC_HandleTypeDef   *hcdc = USBD_Device.pClassData;
+
+  
+  // if(hcdc == NULL)
+  // {
+  //   return;
+  // }
+  // if(hcdc->TxState != 0)
+  // {
+  //   return;
+  // }
+
+  // buffsize = CDC_Itf_TxBufLengh();
+
+  // if (buffsize == 0)
+  // {
+  //   return;
+  // }
+
+  // if (buffsize%CDC_DATA_FS_MAX_PACKET_SIZE == 0)
+  // {
+  //   buffsize -= 1;
+  // }
+
+  // for (int i=0; i<buffsize; i++)
+  // {
+  //   UserTxBufferForUSB[i] = CDC_Itf_TxRead();
+  // }
+
+  // USBD_CDC_SetTxBuffer(&USBD_Device, UserTxBufferForUSB, buffsize);
+  // USBD_CDC_TransmitPacket(&USBD_Device);
+}
+
+void CDC_Itf_SofISR(void)
+{
+  // uint32_t rx_buf_length;
+
+  // rx_buf_length = APP_RX_DATA_SIZE - CDC_Itf_RxAvailable() - 1;
+
+  // if (usb_rx_full == true)
+  // {
+  //   if (rx_buf_length > CDC_DATA_FS_MAX_PACKET_SIZE)
+  //   {
+  //     USBD_CDC_ReceivePacket(&USBD_Device);
+  //     usb_rx_full = false;
+  //   }
+  // }
+  // CDC_Itf_TxISR(NULL);
+}
+
+#endif
 
 #endif /* USBD_USE_CDC */
 #endif /* USBCON */

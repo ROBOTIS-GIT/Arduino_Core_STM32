@@ -157,7 +157,11 @@ void USBSerial::flush(void)
 
 uint32_t USBSerial::baud()
 {
+#if defined(ARDUINO_CommXEL)
+  return CDC_get_baudrate();
+#else
   return 115200;
+#endif
 }
 
 uint8_t USBSerial::stopbits()

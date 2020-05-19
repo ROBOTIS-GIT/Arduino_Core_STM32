@@ -261,9 +261,15 @@ void HAL_PCD_DataInStageCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
   * @param  hpcd: PCD handle
   * @retval None
   */
+#if defined(ARDUINO_CommXEL)
+extern void CDC_Itf_SofISR(void);
+#endif
 void HAL_PCD_SOFCallback(PCD_HandleTypeDef *hpcd)
 {
   USBD_LL_SOF(hpcd->pData);
+#if defined(ARDUINO_CommXEL)
+  CDC_Itf_SofISR();
+#endif
 }
 
 /**
