@@ -808,10 +808,15 @@ uint8_t uart_index(UART_HandleTypeDef *huart)
   */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
+#if defined(ARDUINO_SensorXEL) || defined(ARDUINO_SensorXEL_revE)\
+ || defined(ARDUINO_PowerXEL) //|| defined(ARDUINO_CommXEL)  
+  (void)huart;
+#else
   serial_t *obj = get_serial_obj(huart);
   if (obj && obj->rx_callback != NULL) {
     obj->rx_callback(obj);
   }
+#endif  
 }
 
 /**

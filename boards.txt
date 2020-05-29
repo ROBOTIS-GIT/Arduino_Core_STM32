@@ -52,20 +52,20 @@ XELNetwork.menu.pnum.PowerXEL.bootloader.tool = stm32flash
 XELNetwork.menu.pnum.PowerXEL.bootloader.file = powerXel_boot.bin
 
 # SensorXEL board revE
-#XELNetwork.menu.pnum.SensorXEL_revE=SensorXEL_revE. (32kb RAM)
-#XELNetwork.menu.pnum.SensorXEL_revE.upload.maximum_data_size=32768
-#XELNetwork.menu.pnum.SensorXEL_revE.upload.maximum_size=52736
-#XELNetwork.menu.pnum.SensorXEL_revE.upload.flash_address=0x08003000
-#XELNetwork.menu.pnum.SensorXEL_revE.build.mcu=cortex-m3
-#XELNetwork.menu.pnum.SensorXEL_revE.build.board=SensorXEL_revE
-#XELNetwork.menu.pnum.SensorXEL_revE.build.series=STM32L1xx
-#XELNetwork.menu.pnum.SensorXEL_revE.build.product_line=STM32L151xBA
-#XELNetwork.menu.pnum.SensorXEL_revE.build.variant=XELNetwork_SensorXEL_revE
-#XELNetwork.menu.pnum.SensorXEL_revE.build.flash_offset=0x3200
-#XELNetwork.menu.pnum.SensorXEL_revE.build.cmsis_lib_gcc=arm_cortexM3l_math
-#XELNetwork.menu.pnum.SensorXEL_revE.build.extra_flags=-D{build.product_line} {build.xSerial} -DVECT_TAB_OFFSET={build.flash_offset} -DSERIAL_TX_BUFFER_SIZE=1024 -DSERIAL_RX_BUFFER_SIZE=1024
-#XELNetwork.menu.pnum.SensorXEL_revE.bootloader.tool = stm32flash
-#XELNetwork.menu.pnum.SensorXEL_revE.bootloader.file = sensorXel_boot_revE.bin
+XELNetwork.menu.pnum.SensorXEL_revE=SensorXEL_revE. (32kb RAM)
+XELNetwork.menu.pnum.SensorXEL_revE.upload.maximum_data_size=32768
+XELNetwork.menu.pnum.SensorXEL_revE.upload.maximum_size=52736
+XELNetwork.menu.pnum.SensorXEL_revE.upload.flash_address=0x08003000
+XELNetwork.menu.pnum.SensorXEL_revE.build.mcu=cortex-m3
+XELNetwork.menu.pnum.SensorXEL_revE.build.board=SensorXEL_revE
+XELNetwork.menu.pnum.SensorXEL_revE.build.series=STM32L1xx
+XELNetwork.menu.pnum.SensorXEL_revE.build.product_line=STM32L151xBA
+XELNetwork.menu.pnum.SensorXEL_revE.build.variant=XELNetwork_SensorXEL_revE
+XELNetwork.menu.pnum.SensorXEL_revE.build.flash_offset=0x3200
+XELNetwork.menu.pnum.SensorXEL_revE.build.cmsis_lib_gcc=arm_cortexM3l_math
+XELNetwork.menu.pnum.SensorXEL_revE.build.extra_flags=-D{build.product_line} {build.xSerial} -DVECT_TAB_OFFSET={build.flash_offset} -DSERIAL_TX_BUFFER_SIZE=1024 -DSERIAL_RX_BUFFER_SIZE=1024
+XELNetwork.menu.pnum.SensorXEL_revE.bootloader.tool = stm32flash
+XELNetwork.menu.pnum.SensorXEL_revE.bootloader.file = sensorXel_boot_revE.bin
 
 # CommXEL board (lastest)
 XELNetwork.menu.pnum.CommXEL=CommXEL. (320kb RAM)
