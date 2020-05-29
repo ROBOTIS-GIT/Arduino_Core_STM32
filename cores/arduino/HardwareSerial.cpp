@@ -105,6 +105,12 @@ void serialEventLP1() __attribute__((weak));
 #endif
 #endif // HAVE_HWSERIALx
 
+#if defined(ARDUINO_CommXEL)
+// const uint8_t UART_CH_MAX = 4;
+// uint8_t buffer_idx = 0;
+// uint8_t  _rx_buffer[UART_CH_MAX][SERIAL_RX_BUFFER_SIZE] __attribute__((section(".NoneCacheableMem")));
+#endif
+
 // Constructors ////////////////////////////////////////////////////////////////
 HardwareSerial::HardwareSerial(uint32_t _rx, uint32_t _tx)
 {
@@ -271,7 +277,14 @@ void HardwareSerial::init(PinName _rx, PinName _tx)
     _serial.pin_rx = _rx;
   }
   _serial.pin_tx = _tx;
+#if defined(ARDUINO_CommXEL)
+  // if(buffer_idx < UART_CH_MAX){
+  //   _serial.rx_buff = _rx_buffer[buffer_idx++];
+  // }
   _serial.rx_buff = _rx_buffer;
+#else
+  _serial.rx_buff = _rx_buffer;
+#endif  
   _serial.rx_head = 0;
   _serial.rx_tail = 0;
   _serial.tx_buff = _tx_buffer;
@@ -390,7 +403,7 @@ void HardwareSerial::begin(unsigned long baud, byte config)
   uart_init(&_serial, (uint32_t)baud, databits, parity, stopbits);
   enableHalfDuplexRx();
 #if defined(ARDUINO_SensorXEL) || defined(ARDUINO_SensorXEL_revE)\
- || defined(ARDUINO_PowerXEL)
+ || defined(ARDUINO_PowerXEL) //|| defined(ARDUINO_CommXEL)
 
 #else   
   uart_attach_rx_callback(&_serial, _rx_complete_irq);
@@ -411,8 +424,12 @@ void HardwareSerial::end()
 int HardwareSerial::available(void)
 {
 #if defined(ARDUINO_SensorXEL) || defined(ARDUINO_SensorXEL_revE)\
- || defined(ARDUINO_PowerXEL)
+ || defined(ARDUINO_PowerXEL) //|| defined(ARDUINO_CommXEL)
+#if defined(ARDUINO_CommXEL) 
+  uint16_t cndtr = _serial.handle.hdmarx->Instance->NDTR;
+#else
   uint16_t cndtr = _serial.handle.hdmarx->Instance->CNDTR;
+#endif
   if(cndtr > SERIAL_RX_BUFFER_SIZE){
     cndtr = SERIAL_RX_BUFFER_SIZE;
   }

@@ -69,7 +69,7 @@ compiler.arm.cmsis.ldflags="-L{runtime.tools.CMSIS-5.5.1.path}/CMSIS/DSP/Lib/GCC
 
 # USB Flags
 # ---------
-build.usb_flags=-DUSBCON {build.usb_speed} -DUSBD_VID={build.vid} '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT="{build.board}"' -DHAL_PCD_MODULE_ENABLED 
+build.usb_flags=-DUSBCON {build.usb_speed} -DUSBD_VID={build.vid} -DUSBD_CLASS_PID={build.pid} '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT="{build.board}"' -DHAL_PCD_MODULE_ENABLED 
 
 # Default usb manufacturer will be replaced at compile time using
 # numeric vendor ID if available or by board's specific value.
@@ -173,3 +173,19 @@ tools.stm32flash.erase.pattern=
 tools.stm32flash.bootloader.params.verbose=-v -v -v -v
 tools.stm32flash.bootloader.params.quiet=-q -q
 tools.stm32flash.bootloader.pattern="{path}/{cmd}" -e 48 -w "{runtime.platform.path}/bootloaders/{bootloader.file}" -v -g 0x08000000 {serial.port.file}
+
+# Upload using dfu_util
+tools.dfu_util.cmd=dfu-util
+tools.dfu_util.cmd.windows=dfu-util.exe
+#tools.dfu_util.path={runtime.tools.STM32Tools.path}/tools/linux
+#tools.dfu_util.path.windows={runtime.tools.STM32Tools.path}/tools/win
+#tools.dfu_util.path.macosx={runtime.tools.STM32Tools.path}/tools/macosx
+tools.dfu_util.path={runtime.platform.path}/tools/dfu_util/linux
+tools.dfu_util.path.windows={runtime.platform.path}/tools/dfu_util/win
+#tools.dfu_util.path.macosx={runtime.platform.path}/tools/dfu_util/macosx
+tools.dfu_util.erase.params.verbose=-v
+tools.dfu_util.erase.params.quiet=-q -q
+tools.dfu_util.erase.pattern=
+tools.dfu_util.bootloader.params.verbose=-v -v -v -v
+tools.dfu_util.bootloader.params.quiet=-q -q
+tools.dfu_util.bootloader.pattern="{path}/{cmd}" -d 0483:df11 -a 0 -s 0x08000000 -D "{runtime.platform.path}/bootloaders/{bootloader.file}"

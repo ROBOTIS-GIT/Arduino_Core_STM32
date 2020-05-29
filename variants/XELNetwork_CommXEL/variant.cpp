@@ -135,6 +135,173 @@ void SystemClock_Config(void)
   }
 }
 
+
+#if 0
+DMA_HandleTypeDef huart1dmatx, huart1dmarx;
+DMA_HandleTypeDef huart2dmatx, huart2dmarx;
+
+void HAL_UART_MspInit(UART_HandleTypeDef *huart)
+{
+  if (huart->Instance == USART1)
+  {
+    __HAL_RCC_USART1_CLK_ENABLE();
+    /* Enable DMA clock */
+    __HAL_RCC_DMA2_CLK_ENABLE();
+
+  //  /* Configure the DMA handler for Transmission process */
+  //  huart1dmatx.Instance                 = DMA2_Stream7;
+  //  huart1dmatx.Init.Channel             = DMA_CHANNEL_4;
+  //  huart1dmatx.Init.Direction           = DMA_MEMORY_TO_PERIPH;
+  //  huart1dmatx.Init.PeriphInc           = DMA_PINC_DISABLE;
+  //  huart1dmatx.Init.MemInc              = DMA_MINC_ENABLE;
+  //  huart1dmatx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+  //  huart1dmatx.Init.MemDataAlignment    = DMA_MDATAALIGN_BYTE;
+  //  huart1dmatx.Init.Mode                = DMA_NORMAL;
+  //  huart1dmatx.Init.Priority            = DMA_PRIORITY_LOW;
+  //  huart1dmatx.Init.FIFOMode            = DMA_FIFOMODE_DISABLE;
+  //  huart1dmatx.Init.FIFOThreshold       = DMA_FIFO_THRESHOLD_FULL;
+  //  huart1dmatx.Init.MemBurst            = DMA_MBURST_INC4;
+  //  huart1dmatx.Init.PeriphBurst         = DMA_PBURST_INC4;  
+
+  //  HAL_DMA_Init(&huart1dmatx);
+
+  //  /* Associate the initialized DMA handle to the the UART handle */
+  //  __HAL_LINKDMA(huart, hdmatx, (huart1dmatx));
+
+    /* Configure the DMA handler for reception process */
+    huart1dmarx.Instance                 = DMA2_Stream5;
+    huart1dmarx.Init.Channel             = DMA_CHANNEL_4;
+    huart1dmarx.Init.Direction           = DMA_PERIPH_TO_MEMORY;
+    huart1dmarx.Init.PeriphInc           = DMA_PINC_DISABLE;
+    huart1dmarx.Init.MemInc              = DMA_MINC_ENABLE;
+    huart1dmarx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+    huart1dmarx.Init.MemDataAlignment    = DMA_MDATAALIGN_BYTE;
+    huart1dmarx.Init.Mode                = DMA_CIRCULAR;
+    huart1dmarx.Init.Priority            = DMA_PRIORITY_HIGH;
+    huart1dmarx.Init.FIFOMode            = DMA_FIFOMODE_DISABLE;
+    huart1dmarx.Init.FIFOThreshold       = DMA_FIFO_THRESHOLD_FULL;
+    huart1dmarx.Init.MemBurst            = DMA_MBURST_INC4;
+    huart1dmarx.Init.PeriphBurst         = DMA_PBURST_INC4;
+
+    HAL_DMA_Init(&huart1dmarx);
+
+    /* Associate the initialized DMA handle to the the UART handle */
+    __HAL_LINKDMA(huart, hdmarx, huart1dmarx);
+
+    /*##-4- Configure the NVIC for DMA #########################################*/
+    // HAL_NVIC_SetPriority(DMA2_Stream7_IRQn, 0, 1);
+    // HAL_NVIC_EnableIRQ(DMA2_Stream7_IRQn);
+
+    HAL_NVIC_SetPriority(DMA2_Stream5_IRQn, 0, 1);
+    HAL_NVIC_EnableIRQ(DMA2_Stream5_IRQn);
+
+    HAL_NVIC_SetPriority(USART1_IRQn, 10, 1);
+    HAL_NVIC_EnableIRQ(USART1_IRQn);
+  }
+
+  if (huart->Instance == USART2)
+  {
+    __HAL_RCC_USART2_CLK_ENABLE();
+    /* Enable DMA clock */
+    __HAL_RCC_DMA1_CLK_ENABLE();
+
+  //  /* Configure the DMA handler for Transmission process */
+  //  huart2dmatx.Instance                 = DMA1_Stream6;
+  //  huart2dmatx.Init.Channel             = DMA_CHANNEL_4;  
+  //  huart2dmatx.Init.Direction           = DMA_MEMORY_TO_PERIPH;
+  //  huart2dmatx.Init.PeriphInc           = DMA_PINC_DISABLE;
+  //  huart2dmatx.Init.MemInc              = DMA_MINC_ENABLE;
+  //  huart2dmatx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+  //  huart2dmatx.Init.MemDataAlignment    = DMA_MDATAALIGN_BYTE;
+  //  huart2dmatx.Init.Mode                = DMA_NORMAL;
+  //  huart2dmatx.Init.Priority            = DMA_PRIORITY_LOW;
+  //  huart2dmatx.Init.FIFOMode            = DMA_FIFOMODE_DISABLE;
+  //  huart2dmatx.Init.FIFOThreshold       = DMA_FIFO_THRESHOLD_FULL;
+  //  huart2dmatx.Init.MemBurst            = DMA_MBURST_INC4;
+  //  huart2dmatx.Init.PeriphBurst         = DMA_PBURST_INC4;  
+
+  //  HAL_DMA_Init(&huart2dmatx);
+
+  //  /* Associate the initialized DMA handle to the the UART handle */
+  //  __HAL_LINKDMA(huart, hdmatx, (huart2dmatx));
+
+    /* Configure the DMA handler for reception process */
+    huart2dmarx.Instance                 = DMA1_Stream5;
+    huart2dmarx.Init.Channel             = DMA_CHANNEL_4;
+    huart2dmarx.Init.Direction           = DMA_PERIPH_TO_MEMORY;
+    huart2dmarx.Init.PeriphInc           = DMA_PINC_DISABLE;
+    huart2dmarx.Init.MemInc              = DMA_MINC_ENABLE;
+    huart2dmarx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
+    huart2dmarx.Init.MemDataAlignment    = DMA_MDATAALIGN_BYTE;
+    huart2dmarx.Init.Mode                = DMA_CIRCULAR;
+    huart2dmarx.Init.Priority            = DMA_PRIORITY_HIGH;
+    huart2dmatx.Init.FIFOMode            = DMA_FIFOMODE_DISABLE;
+    huart2dmatx.Init.FIFOThreshold       = DMA_FIFO_THRESHOLD_FULL;
+    huart2dmatx.Init.MemBurst            = DMA_MBURST_INC4;
+    huart2dmatx.Init.PeriphBurst         = DMA_PBURST_INC4;      
+
+    HAL_DMA_Init(&huart2dmarx);
+
+    /* Associate the initialized DMA handle to the the UART handle */
+    __HAL_LINKDMA(huart, hdmarx, huart2dmarx);
+
+    /*##-4- Configure the NVIC for DMA #########################################*/
+    // HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 0, 1);
+    // HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
+
+    HAL_NVIC_SetPriority(DMA1_Stream5_IRQn, 0, 1);
+    HAL_NVIC_EnableIRQ(DMA1_Stream5_IRQn);
+
+    HAL_NVIC_SetPriority(USART2_IRQn, 10, 1);
+    HAL_NVIC_EnableIRQ(USART2_IRQn);
+  }
+}
+
+void HAL_UART_MspDeInit(UART_HandleTypeDef *huart)
+{
+
+  if (huart->Instance == USART1)
+  {
+    __HAL_RCC_USART1_FORCE_RESET();
+    __HAL_RCC_USART1_RELEASE_RESET();
+
+    HAL_NVIC_DisableIRQ(USART1_IRQn);
+    HAL_NVIC_DisableIRQ(DMA2_Stream5_IRQn);
+    HAL_NVIC_DisableIRQ(DMA2_Stream7_IRQn);
+  }
+
+  if (huart->Instance == USART2)
+  {
+    __HAL_RCC_USART2_FORCE_RESET();
+    __HAL_RCC_USART2_RELEASE_RESET();
+
+    HAL_NVIC_DisableIRQ(USART2_IRQn);
+    HAL_NVIC_DisableIRQ(DMA1_Stream5_IRQn);
+    HAL_NVIC_DisableIRQ(DMA1_Stream6_IRQn);
+  }
+}
+
+void DMA2_Channel7_IRQHandler(void)
+{
+  HAL_DMA_IRQHandler(&huart1dmatx);
+}
+
+void DMA2_Channel5_IRQHandler(void)
+{
+  HAL_DMA_IRQHandler(&huart1dmarx);
+}
+
+void DMA1_Channel6_IRQHandler(void)
+{
+  HAL_DMA_IRQHandler(&huart2dmatx);
+}
+
+void DMA1_Channel5_IRQHandler(void)
+{
+  HAL_DMA_IRQHandler(&huart2dmarx);
+}
+#endif
+
 #ifdef __cplusplus
 }
 #endif

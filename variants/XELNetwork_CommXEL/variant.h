@@ -37,26 +37,14 @@ extern "C" {
 #define PB6    5 //DXL_TX
 #define PB8    6 //DIR_PIN
 
-#define PC12   8 //BUTTON
-#define PC11   9 //LED
-
-#define PA1    10 //ETH_REF_CLK
-#define PA7    11 //ETH_CRS_DV
-#define PA2    12 //ETH_MDIO
-#define PC1    13 //ETH_MDC
-#define PC0    14 //ETH_RXER
-#define PC4    15 //ETH_RXD0
-#define PC5    16 //ETH_RXD1
-#define PB11   17 //ETH_RX_EN
-#define PB12   18 //ETH_TXD0
-#define PB13   19 //ETH_TXD1
-
+#define PC12   7 //BUTTON
+#define PC11   8 //LED
 
 // This must be a literal
-#define NUM_DIGITAL_PINS        20
+#define NUM_DIGITAL_PINS        9
 // This must be a literal with a value less than or equal to to MAX_ANALOG_INPUTS
 #define NUM_ANALOG_INPUTS       0
-#define NUM_ANALOG_FIRST        20
+#define NUM_ANALOG_FIRST        9
 
 // On-board LED pin number
 #define LED_BUILTIN             PC11
@@ -81,10 +69,13 @@ extern "C" {
 //#define SERIAL_UART_INSTANCE    1
 #define ENABLE_SERIALUSB
 
+#define DEFAULT_DXL_SERIAL      Serial2
+#define DEFAULT_DXL_PIN         PB8
 
 /* Extra HAL modules */
 #define HAL_ETH_MODULE_ENABLED
-//#define HAL_PCD_MODULE_ENABLED
+#define HAL_IWDG_MODULE_ENABLED
+// #define HAL_PCD_MODULE_ENABLED
 
 #ifdef __cplusplus
 } // extern "C"

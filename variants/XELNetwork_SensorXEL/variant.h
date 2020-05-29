@@ -96,6 +96,9 @@ extern "C" {
 
 #define SERIAL_UART_INSTANCE    1
 
+#define PIN_WIRE_SCL   PB8
+#define PIN_WIRE_SDA   PB9
+
 /* Extra HAL modules */
 //#define HAL_ADC_MODULE_DISABLED
 //#define HAL_I2C_MODULE_DISABLED

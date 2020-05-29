@@ -95,8 +95,11 @@ class HardwareSerial : public Stream {
     // Don't put any members after these buffers, since only the first
     // 32 bytes of this struct can be accessed quickly using the ldd
     // instruction.
+// #if !defined(ARDUINO_CommXEL)    
     unsigned char _rx_buffer[SERIAL_RX_BUFFER_SIZE];
+// #endif
     unsigned char _tx_buffer[SERIAL_TX_BUFFER_SIZE];
+
 
     serial_t _serial;
 

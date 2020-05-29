@@ -25,6 +25,14 @@
 #include "usbd_cdc_if.h"
 #include "bootloader.h"
 
+#if defined(ARDUINO_CommXEL)
+#include "stm32f7xx_hal.h"
+bool enable_auto_reset = true;
+uint8_t CDC_Reset_Status = 0;
+const uint32_t RESET_FLAG_BAUDRATE = 1200;
+const char *JUMP_BOOT_STR = "RESET XELNETWORK";
+#endif
+
 #ifdef USE_USB_HS
 #define CDC_MAX_PACKET_SIZE USB_OTG_HS_MAX_PACKET_SIZE
 #elif defined(USB_OTG_FS) || defined(USB_OTG_FS_MAX_PACKET_SIZE)
@@ -170,6 +178,14 @@ static int8_t USBD_CDC_Control(uint8_t cmd, uint8_t *pbuf, uint16_t length)
       linecoding.format     = pbuf[4];
       linecoding.paritytype = pbuf[5];
       linecoding.datatype   = pbuf[6];
+
+#if defined(ARDUINO_CommXEL)
+      if( linecoding.bitrate == RESET_FLAG_BAUDRATE ){
+        if(enable_auto_reset == true){
+          CDC_Reset_Status = 1;
+        }
+      }
+#endif      
       break;
 
     case CDC_GET_LINE_CODING:
@@ -183,8 +199,8 @@ static int8_t USBD_CDC_Control(uint8_t cmd, uint8_t *pbuf, uint16_t length)
       break;
 
     case CDC_SET_CONTROL_LINE_STATE:
-      lineState =
-        (((USBD_SetupReqTypedef *)pbuf)->wValue & 0x01) != 0; // Check DTR state
+      lineState = 1;
+        // (((USBD_SetupReqTypedef *)pbuf)->wValue & 0x01) != 0; // Check DTR state
       if (lineState) { // Reset the transmit timeout when the port is connected
         transmitStart = 0;
       }
@@ -233,6 +249,31 @@ static int8_t USBD_CDC_Receive(uint8_t *Buf, uint32_t *Len)
   /* It always contains required amount of free space for writing */
   CDC_ReceiveQueue_CommitBlock(&ReceiveQueue, (uint16_t)(*Len));
   receivePended = false;
+
+#if defined(ARDUINO_CommXEL)
+  if( CDC_Reset_Status == 1 ){
+    uint32_t str_len = strlen(JUMP_BOOT_STR);
+    CDC_Reset_Status = 0;
+
+    if( *Len >= str_len ){
+      uint32_t i;
+      for( i=0; i<str_len; i++ )
+      {
+        if( JUMP_BOOT_STR[i] != Buf[i] ) break;
+      }
+
+      if( i == str_len ){
+        IWDG_HandleTypeDef IwdgHandle;
+        IwdgHandle.Instance 	    = IWDG;
+        IwdgHandle.Init.Prescaler = IWDG_PRESCALER_32; // 32Khz/32 = 1Khz(1ms)
+        IwdgHandle.Init.Reload    = 10;
+
+        HAL_IWDG_Init(&IwdgHandle);
+      }
+    }
+  }
+#endif
+
   /* If enough space in the queue for a full buffer then continue receive */
   if (!CDC_resume_receive()) {
     USBD_CDC_ClearBuffer(&hUSBD_Device_CDC);
@@ -334,6 +375,68 @@ bool CDC_resume_receive(void)
   }
   return false;
 }
+
+#if defined(ARDUINO_CommXEL)
+uint32_t CDC_get_baudrate()
+{
+  return linecoding.bitrate;
+}
+
+
+void CDC_Itf_TxISR(void *arg)
+{
+  // uint32_t buffsize;
+  // USBD_CDC_HandleTypeDef   *hcdc = USBD_Device.pClassData;
+
+  
+  // if(hcdc == NULL)
+  // {
+  //   return;
+  // }
+  // if(hcdc->TxState != 0)
+  // {
+  //   return;
+  // }
+
+  // buffsize = CDC_Itf_TxBufLengh();
+
+  // if (buffsize == 0)
+  // {
+  //   return;
+  // }
+
+  // if (buffsize%CDC_DATA_FS_MAX_PACKET_SIZE == 0)
+  // {
+  //   buffsize -= 1;
+  // }
+
+  // for (int i=0; i<buffsize; i++)
+  // {
+  //   UserTxBufferForUSB[i] = CDC_Itf_TxRead();
+  // }
+
+  // USBD_CDC_SetTxBuffer(&USBD_Device, UserTxBufferForUSB, buffsize);
+  // USBD_CDC_TransmitPacket(&USBD_Device);
+}
+
+void CDC_Itf_SofISR(void)
+{
+  // uint32_t rx_buf_length;
+
+  // rx_buf_length = APP_RX_DATA_SIZE - CDC_Itf_RxAvailable() - 1;
+
+  // if (usb_rx_full == true)
+  // {
+  //   if (rx_buf_length > CDC_DATA_FS_MAX_PACKET_SIZE)
+  //   {
+  //     USBD_CDC_ReceivePacket(&USBD_Device);
+  //     usb_rx_full = false;
+  //   }
+  // }
+  // CDC_Itf_TxISR(NULL);
+}
+
+#endif
 
 #endif /* USBD_USE_CDC */
 #endif /* USBCON */
