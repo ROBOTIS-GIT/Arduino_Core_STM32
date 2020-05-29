@@ -29,10 +29,10 @@ const PinName digitalPin[] = {
   PB_1,  // D2/A2//PWM
   PB_6,  // D3
   PB_7,  // D4
-  PB_12, // D5/A4
-  PB_13, // D6/A5
-  PB_14, // D7/A6
-  PB_15, // D8/A7
+  PB_12, // D5/A3
+  PB_13, // D6/A4
+  PB_14, // D7/A5
+  PB_15, // D8/A6
   PA_11, // D9
 
   PA_10, // 10/UART_RX
@@ -59,11 +59,10 @@ const PinName digitalPin[] = {
   PA_6,  // 24/A0
   PA_7,  // 25/A1 
   PB_1,  // 26/A2
-  PB_6,  // 27/A3
-  PB_12, // 28/A5
-  PB_13, // 29/A6
-  PB_14, // 30/A7
-  PB_15  // 31/A8
+  PB_12, // 28/A3
+  PB_13, // 29/A4
+  PB_14, // 30/A5
+  PB_15  // 31/A6
 };
 
 #ifdef __cplusplus

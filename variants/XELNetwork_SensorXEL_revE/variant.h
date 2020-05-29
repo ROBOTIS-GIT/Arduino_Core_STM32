@@ -30,12 +30,12 @@ extern "C" {
 #define PA6  0  // D0/A0//PWM
 #define PA7  1  // D1/A1//PWM
 #define PB1  2  // D2/A2//PWM
-#define PB6  3  // D3/A3//PWM
+#define PB6  3  // D3//PWM
 #define PB7  4  // D4//PWM
-#define PB12 5  // D5/A5//PWM
-#define PB13 6  // D6/A6//PWM
-#define PB14 7  // D7/A7//PWM
-#define PB15 8  // D8/A8//PWM
+#define PB12 5  // D5/A3//PWM
+#define PB13 6  // D6/A4//PWM
+#define PB14 7  // D7/A5//PWM
+#define PB15 8  // D8/A6//PWM
 #define PA11 9  // D9//
 
 #define PA10 10 // UART_RX
@@ -62,9 +62,9 @@ extern "C" {
 #define PB8  23 // SCL
 
 // This must be a literal
-#define NUM_DIGITAL_PINS        24+8
+#define NUM_DIGITAL_PINS        24+7
 // This must be a literal with a value less than or equal to to MAX_ANALOG_INPUTS
-#define NUM_ANALOG_INPUTS       8
+#define NUM_ANALOG_INPUTS       7
 #define NUM_ANALOG_FIRST        24
 
 // On-board LED pin number
@@ -95,6 +95,9 @@ extern "C" {
 #define PIN_SERIAL3_TX          PB10
 
 #define SERIAL_UART_INSTANCE    1
+
+#define PIN_WIRE_SCL   PB8
+#define PIN_WIRE_SDA   PB9
 
 /* Extra HAL modules */
 //#define HAL_ADC_MODULE_DISABLED
